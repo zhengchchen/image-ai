@@ -24,6 +24,10 @@ export const Editor = () => {
       initialCanvas: canvas,
       initialContainer: containerRef.current!,
     });
+
+    return () => {
+      canvas.dispose();
+    };
   }, [init]);
 
   return (
