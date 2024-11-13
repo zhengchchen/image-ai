@@ -11,7 +11,7 @@ interface ToolbarProps {
 }
 
 export const Toolbar = ({ editor, activeTool, onChangeActiveTool }: ToolbarProps) => {
-  const fillColor = editor?.fillColor;
+  const fillColor = editor?.getActiveFillColor();
 
   if (editor?.selectedObjects.length === 0) {
     return <div className="shrink-0 h-[56px] border-b bg-white w-full flex items-center overflow-x-auto z-[49] p-2" />;
