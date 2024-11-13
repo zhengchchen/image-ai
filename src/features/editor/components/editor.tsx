@@ -7,7 +7,7 @@ import { fabric } from "fabric";
 import { Sidebar } from "./sidebar";
 import { Toolbar } from "./toolbar";
 import { Footer } from "./footer";
-import { ActiveTool } from "@/features/editor/types";
+import { ActiveTool, selectionDependentTools } from "@/features/editor/types";
 import { ShapeSidebar } from "./shape-sidebar";
 import { FillColorSidebar } from "./fill-color-sidebar";
 
@@ -28,7 +28,15 @@ export const Editor = () => {
     [activeTool]
   );
 
-  const { init, editor } = useEditor();
+  const onClearSelection = useCallback(() => {
+    if (selectionDependentTools.includes(activeTool)) {
+      onChangeActiveTool("select");
+    }
+  }, [activeTool, onChangeActiveTool]);
+
+  const { init, editor } = useEditor({
+    clearSelectionCallback: onClearSelection,
+  });
 
   const canvasRef = useRef(null);
   const containerRef = useRef<HTMLDivElement>(null);

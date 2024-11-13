@@ -14,6 +14,7 @@ import {
   FILL_COLOR,
   STROKE_COLOR,
   STROKE_WIDTH,
+  EditorHookProps,
 } from "@/features/editor/types";
 import { isTextType } from "@/features/editor/utils";
 
@@ -163,7 +164,7 @@ const buildEditor = ({
   };
 };
 
-export const useEditor = () => {
+export const useEditor = ({clearSelectionCallback}:EditorHookProps) => {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
@@ -177,7 +178,7 @@ export const useEditor = () => {
     container,
   });
 
-  useCanvasEvents({ canvas, setSelectedObjects });
+  useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
 
   const editor = useMemo(() => {
     if (canvas) {
