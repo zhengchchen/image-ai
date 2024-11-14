@@ -148,6 +148,7 @@ export interface Editor {
   bringForward: () => void;
   sendBackwards: () => void;
   changeOpacity: (value: number) => void;
+  changeFontSize: (value: number) => void;
   changeFontStyle: (value: string) => void;
   changeFontLinethrough: (value: boolean) => void;
   changeFontUnderline: (value: boolean) => void;
@@ -166,6 +167,7 @@ export interface Editor {
   addDiamond: () => void;
   canvas: fabric.Canvas;
   getActiveOpacity: () => number;
+  getActiveFontSize: () => number;
   getActiveFontStyle: () => string;
   getActiveFontWeight: () => number;
   getActiveFontLinethrough: () => boolean;

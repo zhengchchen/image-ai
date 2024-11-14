@@ -19,6 +19,7 @@ import {
   DIAMOND_OPTIONS,
   FONT_FAMILY,
   FONT_WEIGHT,
+  FONT_SIZE,
 } from "@/features/editor/types";
 import { isTextType } from "@/features/editor/utils";
 
@@ -84,6 +85,15 @@ const buildEditor = ({
     changeOpacity: (value: number) => {
       canvas.getActiveObjects().forEach((object) => {
         object.set({ opacity: value });
+      });
+      canvas.renderAll();
+    },
+    changeFontSize: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          //@ts-ignore
+          object.set({ fontSize: value });
+        }
       });
       canvas.renderAll();
     },
@@ -265,6 +275,15 @@ const buildEditor = ({
       
       const value = selectedObject.get("opacity") || 1;
       return value as number;
+    },
+    getActiveFontSize: () => {
+      const selectedObject = selectedObjects[0];
+      if(!selectedObject){
+        return FONT_SIZE
+      }
+      //@ts-ignore
+      const value = selectedObject.get("fontSize") || FONT_SIZE;
+      return value;
     },
     getActiveFontStyle: () => {
       const selectedObject = selectedObjects[0];
