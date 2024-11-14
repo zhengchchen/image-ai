@@ -8,7 +8,7 @@ import {
   Editor,
   BuildEditorProps,
   CIRCLE_OPTIONS,
-  DIAMOND_OPTIONS,
+  TEXT_OPTIONS,
   RECTANGLE_OPTIONS,
   TRIANGLE_OPTIONS,
   FILL_COLOR,
@@ -16,6 +16,7 @@ import {
   STROKE_WIDTH,
   EditorHookProps,
   STROKE_DASH_ARRAY,
+  DIAMOND_OPTIONS,
 } from "@/features/editor/types";
 import { isTextType } from "@/features/editor/utils";
 
@@ -50,6 +51,14 @@ const buildEditor = ({
   };
 
   return {
+    addText: (value, options) => {
+      const object = new fabric.Textbox(value, {
+        ...TEXT_OPTIONS,
+        fill: fillColor,
+        ...options,
+      });
+      addToCanvas(object);
+    },
     getActiveOpacity: () => {
       const selectedObject = selectedObjects[0];
       if(!selectedObject){
