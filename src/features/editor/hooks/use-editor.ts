@@ -18,6 +18,7 @@ import {
   STROKE_DASH_ARRAY,
   DIAMOND_OPTIONS,
   FONT_FAMILY,
+  FONT_WEIGHT,
 } from "@/features/editor/types";
 import { isTextType } from "@/features/editor/utils";
 
@@ -62,21 +63,6 @@ const buildEditor = ({
       });
       addToCanvas(object);
     },
-    getActiveOpacity: () => {
-      const selectedObject = selectedObjects[0];
-      if(!selectedObject){
-        return 1;
-      }
-      
-      const value = selectedObject.get("opacity") || 1;
-      return value as number;
-    },
-    changeOpacity: (value: number) => {
-      canvas.getActiveObjects().forEach((object) => {
-        object.set({ opacity: value });
-      });
-      canvas.renderAll();
-    },
     bringForward: () => {
       canvas.getActiveObjects().forEach((object) => {
         canvas.bringForward(object);
@@ -94,6 +80,57 @@ const buildEditor = ({
 
       const workspace = getWorkspace();
       workspace?.sendToBack();
+    },
+    changeOpacity: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ opacity: value });
+      });
+      canvas.renderAll();
+    },
+    changeFontLinethrough: (value: boolean) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          //@ts-ignore
+          object.set({ linethrough: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeFontUnderline: (value: boolean) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          //@ts-ignore
+          object.set({ underline: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeFontStyle: (value: string) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          //@ts-ignore
+          object.set({ fontStyle: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeFontWeight: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          //@ts-ignore
+          object.set({ fontWeight: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeTextAlign: (value: string) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          //@ts-ignore
+          object.set({ textAlign: value });
+        }
+      });
+      canvas.renderAll();
     },
     changeFontFamily: (value: string) => {
       setFontFamily(value);
@@ -220,6 +257,60 @@ const buildEditor = ({
       addToCanvas(object);
     },
     canvas,
+    getActiveOpacity: () => {
+      const selectedObject = selectedObjects[0];
+      if(!selectedObject){
+        return 1;
+      }
+      
+      const value = selectedObject.get("opacity") || 1;
+      return value as number;
+    },
+    getActiveFontStyle: () => {
+      const selectedObject = selectedObjects[0];
+      if(!selectedObject){
+        return "normal"
+      }
+      //@ts-ignore
+      const value = selectedObject.get("fontStyle") || "normal";
+      return value;
+    },
+    getActiveFontLinethrough: () => {
+      const selectedObject = selectedObjects[0];
+      if(!selectedObject){
+        return false
+      }
+      //@ts-ignore
+      const value = selectedObject.get("linethrough") || false;
+      return value;
+    },
+    getActiveFontUnderline: () => {
+      const selectedObject = selectedObjects[0];
+      if(!selectedObject){
+        return false
+      }
+      //@ts-ignore
+      const value = selectedObject.get("underline") || false;
+      return value;
+    },
+    getActiveTextAlign: () => {
+      const selectedObject = selectedObjects[0];
+      if(!selectedObject){
+        return "left"
+      }
+      //@ts-ignore
+      const value = selectedObject.get("textAlign") || "left";
+      return value;
+    },
+    getActiveFontWeight: () => {
+      const selectedObject = selectedObjects[0];
+      if(!selectedObject){
+        return FONT_WEIGHT
+      }
+      //@ts-ignore
+      const value = selectedObject.get("fontWeight") || FONT_WEIGHT;
+      return value;
+    },
     getActiveFontFamily: () => {
       const selectedObject = selectedObjects[0];
       if(!selectedObject){
