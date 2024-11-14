@@ -2,7 +2,15 @@ import { fabric } from "fabric";
 import { ITextboxOptions } from "fabric/fabric-impl";
 import * as material from "material-colors";
 
-export const selectionDependentTools = ["fill", "font", "filter", "opacity", "remove-bg", "stroke-color", "stroke-width"];
+export const selectionDependentTools = [
+  "fill",
+  "font",
+  "filter",
+  "opacity",
+  "remove-bg",
+  "stroke-color",
+  "stroke-width",
+];
 
 export const fonts = [
   "Arial",
@@ -127,7 +135,6 @@ export interface EditorHookProps {
   clearSelectionCallback?: () => void;
 }
 
-
 export type BuildEditorProps = {
   canvas: fabric.Canvas;
   fillColor: string;
@@ -144,8 +151,9 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
+  addImage: (value: string) => void;
   delete: () => void;
-  addText: (value: string, options?:ITextboxOptions) => void;
+  addText: (value: string, options?: ITextboxOptions) => void;
   bringForward: () => void;
   sendBackwards: () => void;
   changeOpacity: (value: number) => void;

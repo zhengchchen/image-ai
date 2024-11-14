@@ -56,6 +56,22 @@ const buildEditor = ({
   };
 
   return {
+    addImage: (value: string) => {
+      fabric.Image.fromURL(
+        value,
+        (image) => {
+          const workspace = getWorkspace();
+
+          image.scaleToWidth(workspace?.width || 0);
+          image.scaleToHeight(workspace?.height || 0);
+
+          addToCanvas(image);
+        },
+        {
+          crossOrigin: "anonymous",
+        }
+      );
+    },
     delete: () => {
       canvas.getActiveObjects().forEach((object) => {
         canvas.remove(object);
@@ -76,7 +92,7 @@ const buildEditor = ({
         canvas.bringForward(object);
       });
       canvas.renderAll();
-      
+
       const workspace = getWorkspace();
       workspace?.sendToBack();
     },
@@ -276,17 +292,17 @@ const buildEditor = ({
     canvas,
     getActiveOpacity: () => {
       const selectedObject = selectedObjects[0];
-      if(!selectedObject){
+      if (!selectedObject) {
         return 1;
       }
-      
+
       const value = selectedObject.get("opacity") || 1;
       return value as number;
     },
     getActiveFontSize: () => {
       const selectedObject = selectedObjects[0];
-      if(!selectedObject){
-        return FONT_SIZE
+      if (!selectedObject) {
+        return FONT_SIZE;
       }
       //@ts-ignore
       const value = selectedObject.get("fontSize") || FONT_SIZE;
@@ -294,8 +310,8 @@ const buildEditor = ({
     },
     getActiveFontStyle: () => {
       const selectedObject = selectedObjects[0];
-      if(!selectedObject){
-        return "normal"
+      if (!selectedObject) {
+        return "normal";
       }
       //@ts-ignore
       const value = selectedObject.get("fontStyle") || "normal";
@@ -303,8 +319,8 @@ const buildEditor = ({
     },
     getActiveFontLinethrough: () => {
       const selectedObject = selectedObjects[0];
-      if(!selectedObject){
-        return false
+      if (!selectedObject) {
+        return false;
       }
       //@ts-ignore
       const value = selectedObject.get("linethrough") || false;
@@ -312,8 +328,8 @@ const buildEditor = ({
     },
     getActiveFontUnderline: () => {
       const selectedObject = selectedObjects[0];
-      if(!selectedObject){
-        return false
+      if (!selectedObject) {
+        return false;
       }
       //@ts-ignore
       const value = selectedObject.get("underline") || false;
@@ -321,8 +337,8 @@ const buildEditor = ({
     },
     getActiveTextAlign: () => {
       const selectedObject = selectedObjects[0];
-      if(!selectedObject){
-        return "left"
+      if (!selectedObject) {
+        return "left";
       }
       //@ts-ignore
       const value = selectedObject.get("textAlign") || "left";
@@ -330,8 +346,8 @@ const buildEditor = ({
     },
     getActiveFontWeight: () => {
       const selectedObject = selectedObjects[0];
-      if(!selectedObject){
-        return FONT_WEIGHT
+      if (!selectedObject) {
+        return FONT_WEIGHT;
       }
       //@ts-ignore
       const value = selectedObject.get("fontWeight") || FONT_WEIGHT;
@@ -339,8 +355,8 @@ const buildEditor = ({
     },
     getActiveFontFamily: () => {
       const selectedObject = selectedObjects[0];
-      if(!selectedObject){
-        return fontFamily
+      if (!selectedObject) {
+        return fontFamily;
       }
       //@ts-ignore
       const value = selectedObject.get("fontFamily") || fontFamily;
@@ -348,37 +364,37 @@ const buildEditor = ({
     },
     getActiveFillColor: () => {
       const selectedObject = selectedObjects[0];
-      if(!selectedObject){
-        return fillColor
+      if (!selectedObject) {
+        return fillColor;
       }
-      
+
       const value = selectedObject.get("fill") || fillColor;
       return value as string;
     },
     getActiveStrokeColor: () => {
       const selectedObject = selectedObjects[0];
-      if(!selectedObject){
-        return strokeColor
+      if (!selectedObject) {
+        return strokeColor;
       }
-      
+
       const value = selectedObject.get("stroke") || strokeColor;
       return value as string;
     },
     getActiveStrokeWidth: () => {
       const selectedObject = selectedObjects[0];
-      if(!selectedObject){
-        return strokeWidth
+      if (!selectedObject) {
+        return strokeWidth;
       }
-      
+
       const value = selectedObject.get("strokeWidth") || strokeWidth;
       return value as number;
     },
     getActiveStrokeDashArray: () => {
       const selectedObject = selectedObjects[0];
-      if(!selectedObject){
-        return strokeDashArray
+      if (!selectedObject) {
+        return strokeDashArray;
       }
-      
+
       const value = selectedObject.get("strokeDashArray") || strokeDashArray;
       return value as number[];
     },
@@ -386,7 +402,7 @@ const buildEditor = ({
   };
 };
 
-export const useEditor = ({clearSelectionCallback}:EditorHookProps) => {
+export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
