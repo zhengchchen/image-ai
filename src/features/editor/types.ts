@@ -4,6 +4,27 @@ import * as material from "material-colors";
 
 export const selectionDependentTools = ["fill", "font", "filter", "opacity", "remove-bg", "stroke-color", "stroke-width"];
 
+export const fonts = [
+  "Arial",
+  "Arial Black",
+  "Verdana",
+  "Helvetica",
+  "Tahoma",
+  "Trebuchet MS",
+  "Times New Roman",
+  "Georgia",
+  "Garamond",
+  "Courier New",
+  "Brush Script MT",
+  "Palatino",
+  "Bookman",
+  "Comic Sans MS",
+  "Impact",
+  "Lucida Sans Unicode",
+  "Geneva",
+  "Lucida Console",
+];
+
 export const colors = [
   material.red["500"],
   material.pink["500"],
@@ -112,19 +133,22 @@ export type BuildEditorProps = {
   strokeColor: string;
   strokeWidth: number;
   strokeDashArray: number[];
+  fontFamily: string;
   setFillColor: (color: string) => void;
   setStrokeColor: (color: string) => void;
   setStrokeWidth: (width: number) => void;
   setStrokeDashArray: (array: number[]) => void;
+  setFontFamily: (family: string) => void;
   selectedObjects: fabric.Object[];
 };
 
 export interface Editor {
-  addText: (value: string,options?:ITextboxOptions) => void;
+  addText: (value: string, options?:ITextboxOptions) => void;
   getActiveOpacity: () => number;
   changeOpacity: (value: number) => void;
   bringForward: () => void;
   sendBackwards: () => void;
+  changeFontFamily: (value: string) => void;
   changeFillColor: (color: string) => void;
   changeStrokeColor: (color: string) => void;
   changeStrokeWidth: (width: number) => void;
@@ -136,6 +160,7 @@ export interface Editor {
   addInverseTriangle: () => void;
   addDiamond: () => void;
   canvas: fabric.Canvas;
+  getActiveFontFamily: () => string;
   getActiveFillColor: () => string;
   getActiveStrokeColor: () => string;
   getActiveStrokeWidth: () => number;
