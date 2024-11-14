@@ -1,14 +1,14 @@
 import { useState } from "react";
 
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa";
-import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ChevronDown } from "lucide-react";
+import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ChevronDown, Trash } from "lucide-react";
 import { BsBorderWidth } from "react-icons/bs";
 import { RxTransparencyGrid } from "react-icons/rx";
 
 import { Hint } from "@/components/hint";
 import { Button } from "@/components/ui/button";
 import { isTextType } from "@/features/editor/utils";
-import { ActiveTool, Editor, FONT_SIZE, FONT_STYLE, FONT_WEIGHT } from "@/features/editor/types";
+import { ActiveTool, Editor, FONT_SIZE, FONT_WEIGHT } from "@/features/editor/types";
 import { cn } from "@/lib/utils";
 import { FontSizeInput } from "./font-size-input";
 
@@ -320,6 +320,17 @@ export const Toolbar = ({ editor, activeTool, onChangeActiveTool }: ToolbarProps
             className={cn(activeTool === "opacity" && "bg-gray-100")}
           >
             <RxTransparencyGrid className="size-4" />
+          </Button>
+        </Hint>
+      </div>
+      <div className="flex items-center h-full justify-center">
+        <Hint label="Delete" side="bottom" sideOffset={5}>
+          <Button
+            onClick={() => editor?.delete()}
+            size="icon"
+            variant="ghost"
+          >
+            <Trash className="size-4" />
           </Button>
         </Hint>
       </div>

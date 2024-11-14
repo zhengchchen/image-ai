@@ -144,6 +144,7 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
+  delete: () => void;
   addText: (value: string, options?:ITextboxOptions) => void;
   bringForward: () => void;
   sendBackwards: () => void;
