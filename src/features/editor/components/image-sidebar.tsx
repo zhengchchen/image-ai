@@ -20,7 +20,6 @@ interface ImageSidebarProps {
 
 export const ImageSidebar = ({ editor, activeTool, onChangeActiveTool }: ImageSidebarProps) => {
   const { data, isLoading, isError } = useGetImages();
-
   const onClose = () => {
     onChangeActiveTool("select");
   };

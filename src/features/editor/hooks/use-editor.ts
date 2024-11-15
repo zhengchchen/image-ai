@@ -21,7 +21,7 @@ import {
   FONT_WEIGHT,
   FONT_SIZE,
 } from "@/features/editor/types";
-import { isTextType } from "@/features/editor/utils";
+import { createFilter, isTextType } from "@/features/editor/utils";
 
 const buildEditor = ({
   canvas,
@@ -56,6 +56,20 @@ const buildEditor = ({
   };
 
   return {
+    changeImageFilter: (value: string) => {
+      const objects = canvas.getActiveObjects();
+      objects.forEach((object) => {
+        if(object.type === "image"){
+          const imgaeObject = object as fabric.Image
+
+          const effect = createFilter(value)
+          imgaeObject.filters = effect ? [effect] : []
+
+          imgaeObject.applyFilters()
+        }
+      });
+      canvas.renderAll();
+    },
     addImage: (value: string) => {
       fabric.Image.fromURL(
         value,
