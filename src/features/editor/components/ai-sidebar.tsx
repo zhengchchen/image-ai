@@ -26,6 +26,7 @@ export const AiSidebar = ({ editor, activeTool, onChangeActiveTool }: AiSidebarP
     mutation.mutate(
       { prompt: value },
       {
+        // @ts-ignore
         onSuccess: ({ data }) => {
           console.log(data);
           editor?.addImage(data);
