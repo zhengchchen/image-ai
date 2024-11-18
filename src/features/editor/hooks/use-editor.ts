@@ -22,8 +22,11 @@ import {
   FONT_SIZE,
 } from "@/features/editor/types";
 import { createFilter, isTextType } from "@/features/editor/utils";
+import { useClipboard } from "./use-clipboard";
 
 const buildEditor = ({
+  copy,
+  paste,
   canvas,
   fillColor,
   setFillColor,
@@ -56,16 +59,18 @@ const buildEditor = ({
   };
 
   return {
+    onCopy: copy,
+    onPaste: paste,
     changeImageFilter: (value: string) => {
       const objects = canvas.getActiveObjects();
       objects.forEach((object) => {
-        if(object.type === "image"){
-          const imgaeObject = object as fabric.Image
+        if (object.type === "image") {
+          const imgaeObject = object as fabric.Image;
 
-          const effect = createFilter(value)
-          imgaeObject.filters = effect ? [effect] : []
+          const effect = createFilter(value);
+          imgaeObject.filters = effect ? [effect] : [];
 
-          imgaeObject.applyFilters()
+          imgaeObject.applyFilters();
         }
       });
       canvas.renderAll();
@@ -434,9 +439,13 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
 
   useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
 
+  const { copy, paste } = useClipboard({ canvas });
+
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
+        copy,
+        paste,
         canvas,
         fillColor,
         setFillColor,
@@ -452,7 +461,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
       });
     }
     return undefined;
-  }, [canvas, fillColor, strokeColor, strokeDashArray, strokeWidth, fontFamily, selectedObjects]);
+  }, [copy, paste, canvas, fillColor, strokeColor, strokeDashArray, strokeWidth, fontFamily, selectedObjects]);
 
   const init = useCallback(
     ({ initialCanvas, initialContainer }: { initialCanvas: fabric.Canvas; initialContainer: HTMLDivElement }) => {

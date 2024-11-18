@@ -64,12 +64,12 @@ export const RemoveBgSidebar = ({ editor, activeTool, onChangeActiveTool }: Remo
             <div
               className={cn(
                 "relative aspect-square rounded-md overflow-hidden transition bg-muted",
-                false && "opacity-50"
+                mutation.isPending && "opacity-50"
               )}
             >
               <Image src={imageSrc} alt="image" fill className="object-cover" />
             </div>
-            <Button onClick={onClick} className="w-full">
+            <Button disabled={mutation.isPending} onClick={onClick} className="w-full">
               Remove Background
             </Button>
           </div>
