@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { useGetImages } from "@/features/images/api/use-get-imgaes";
-import { ToolSidebarHeader } from "./tool-siderbar-header";
+import { ToolSidebarHeader } from "./tool-sidebar-header";
 import { UploadButton } from "@/lib/uploadthing";
 
 interface ImageSidebarProps {

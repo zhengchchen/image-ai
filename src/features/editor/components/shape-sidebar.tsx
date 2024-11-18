@@ -1,6 +1,6 @@
 import { ActiveTool, Editor } from "@/features/editor/types";
 import { cn } from "@/lib/utils";
-import { ToolSidebarHeader } from "@/features/editor/components/tool-siderbar-header";
+import { ToolSidebarHeader } from "@/features/editor/components/tool-sidebar-header";
 import { ToolSidebarClose } from "@/features/editor/components/tool-sidebar-close";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ShapeTool } from "./shape-tool";

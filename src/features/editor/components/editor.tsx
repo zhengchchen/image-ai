@@ -19,33 +19,39 @@ import { ImageSidebar } from "./image-sidebar";
 import { FilterSidebar } from "./filter-sidebar";
 import { AiSidebar } from "./ai-sidebar";
 import { RemoveBgSidebar } from "./remove-bg-sidebar";
+import { DrawSidebar } from "./draw-sidebar";
 
 export const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
 
-  const onChangeActiveTool = useCallback(
-    (tool: ActiveTool) => {
-      if (tool === activeTool) {
-        return setActiveTool("select");
-      }
-      if (tool === "draw") {
-      }
-      if (activeTool === "draw") {
-      }
-      setActiveTool(tool);
-    },
-    [activeTool]
-  );
-
   const onClearSelection = useCallback(() => {
     if (selectionDependentTools.includes(activeTool)) {
-      onChangeActiveTool("select");
+      setActiveTool("select");
     }
-  }, [activeTool, onChangeActiveTool]);
+  }, [activeTool]);
 
   const { init, editor } = useEditor({
     clearSelectionCallback: onClearSelection,
   });
+
+  const onChangeActiveTool = useCallback(
+    (tool: ActiveTool) => {
+      if (tool === "draw") {
+        editor?.enableDrawingMode();
+      }
+
+      if (activeTool === "draw") {
+        editor?.disableDrawingMode();
+      }
+
+      if (tool === activeTool) {
+        return setActiveTool("select");
+      }
+
+      setActiveTool(tool);
+    },
+    [activeTool, editor]
+  );
 
   const canvasRef = useRef(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -82,6 +88,7 @@ export const Editor = () => {
         <FilterSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <AiSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <RemoveBgSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+        <DrawSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <main className="bg-muted flex-1 overflow-auto relative flex flex-col">
           <Toolbar
             editor={editor}

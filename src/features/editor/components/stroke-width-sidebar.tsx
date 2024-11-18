@@ -1,6 +1,6 @@
 import { ActiveTool, Editor, STROKE_DASH_ARRAY, STROKE_WIDTH } from "@/features/editor/types";
 import { cn } from "@/lib/utils";
-import { ToolSidebarHeader } from "@/features/editor/components/tool-siderbar-header";
+import { ToolSidebarHeader } from "@/features/editor/components/tool-sidebar-header";
 import { ToolSidebarClose } from "@/features/editor/components/tool-sidebar-close";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -28,7 +28,7 @@ export const StrokeWidthSidebar = ({ editor, activeTool, onChangeActiveTool }: S
 
   const onChangeStrokeType = (value: number[]) => {
     editor?.changeStrokeDashArray(value);
-  }
+  };
 
   return (
     <aside
@@ -41,33 +41,33 @@ export const StrokeWidthSidebar = ({ editor, activeTool, onChangeActiveTool }: S
       <ScrollArea className="h-full">
         <div className="p-4 space-y-4 border-b">
           <Label className="text-sm">Stroke width</Label>
-          <Slider value={[widthValue]} onValueChange={(values)=>onChangeStrokeWidth(values[0])} />
+          <Slider value={[widthValue]} onValueChange={(values) => onChangeStrokeWidth(values[0])} />
         </div>
         <div className="p-4 space-y-4 border-b">
           <Label className="text-sm">Stroke type</Label>
           <Button
-            onClick={()=>onChangeStrokeType([ ])}
-            variant='secondary' 
-            size='lg' 
+            onClick={() => onChangeStrokeType([])}
+            variant="secondary"
+            size="lg"
             className={cn(
-              "w-full h-16 justify-start text-left", 
-              JSON.stringify(typeValue) ===`[]` && "border-2 border-blue-500"
-            )} 
-            style={{padding: '8px 16px'}}
+              "w-full h-16 justify-start text-left",
+              JSON.stringify(typeValue) === `[]` && "border-2 border-blue-500"
+            )}
+            style={{ padding: "8px 16px" }}
           >
-            <div className="w-full border-black rounded-full border-4"/>
+            <div className="w-full border-black rounded-full border-4" />
           </Button>
           <Button
-            onClick={()=>onChangeStrokeType([5, 5])}
-            variant='secondary' 
-            size='lg' 
+            onClick={() => onChangeStrokeType([5, 5])}
+            variant="secondary"
+            size="lg"
             className={cn(
-              "w-full h-16 justify-start text-left", 
-              JSON.stringify(typeValue) ===`[5,5]` && "border-2 border-blue-500"
-            )}  
-            style={{padding: '8px 16px'}}
+              "w-full h-16 justify-start text-left",
+              JSON.stringify(typeValue) === `[5,5]` && "border-2 border-blue-500"
+            )}
+            style={{ padding: "8px 16px" }}
           >
-            <div className="w-full border-black rounded-full border-4 border-dashed"/>
+            <div className="w-full border-black rounded-full border-4 border-dashed" />
           </Button>
         </div>
       </ScrollArea>

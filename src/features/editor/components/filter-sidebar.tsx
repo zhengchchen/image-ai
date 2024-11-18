@@ -1,6 +1,6 @@
 import { ActiveTool, Editor, filters } from "@/features/editor/types";
 import { cn } from "@/lib/utils";
-import { ToolSidebarHeader } from "@/features/editor/components/tool-siderbar-header";
+import { ToolSidebarHeader } from "@/features/editor/components/tool-sidebar-header";
 import { ToolSidebarClose } from "@/features/editor/components/tool-sidebar-close";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -27,18 +27,16 @@ export const FilterSidebar = ({ editor, activeTool, onChangeActiveTool }: Filter
       <ToolSidebarHeader title="Filter" description="Apply a filter to selected image" />
       <ScrollArea className="h-full">
         <div className="p-4 space-y-1 border-b">
-          {
-            filters.map((filter) => (
-              <Button 
-                onClick={() => editor?.changeImageFilter(filter)}
-                key={filter} 
-                variant="secondary" 
-                className="w-full h-16 justify-start text-left"
-              >
-                {filter}
-              </Button>
-            ))
-          }
+          {filters.map((filter) => (
+            <Button
+              onClick={() => editor?.changeImageFilter(filter)}
+              key={filter}
+              variant="secondary"
+              className="w-full h-16 justify-start text-left"
+            >
+              {filter}
+            </Button>
+          ))}
         </div>
       </ScrollArea>
       <ToolSidebarClose onClick={onClose} />
