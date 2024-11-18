@@ -12,9 +12,7 @@ const app = new Hono()
       })
     ),
     async (c) => {
-      console.log("开始处理移除背景请求...");
       const { image } = c.req.valid("json");
-      console.log("收到图片数据");
 
       try {
         const input = {
@@ -33,13 +31,9 @@ const app = new Hono()
           }),
         });
 
-        console.log("Replicate API 响应状态:", response.status);
         const prediction = await response.json();
-        console.log("初始预测结果:", prediction);
 
         const getResult = async () => {
-          console.log("正在获取处理结果...");
-          console.log("请求 URL:", prediction.urls?.get);
           const resultResponse = await fetch(prediction.urls.get, {
             headers: {
               Authorization: `Token ${process.env.REPLICATE_API_TOKEN}`,
@@ -52,18 +46,14 @@ const app = new Hono()
         while (true) {
           result = await getResult();
           if (result.status === "succeeded") {
-            console.log("成功移除背景！", result.output);
             return c.json({ data: result.output });
           }
           if (result.status === "failed") {
-            console.log("背景移除失败:", result.error);
             throw new Error("Background removal failed");
           }
-          console.log(`等待中... 当前状态: ${result.status}`);
           await new Promise((resolve) => setTimeout(resolve, 1000));
         }
       } catch (error) {
-        console.error("发生错误:", error);
         return c.json({ error: "Failed to remove background" }, 500);
       }
     }
