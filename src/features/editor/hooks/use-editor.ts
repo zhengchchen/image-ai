@@ -25,6 +25,7 @@ import { createFilter, isTextType } from "@/features/editor/utils";
 import { useClipboard } from "./use-clipboard";
 
 const buildEditor = ({
+  autoZoom,
   copy,
   paste,
   canvas,
@@ -59,6 +60,17 @@ const buildEditor = ({
   };
 
   return {
+    getWorkspace,
+    changeSize: (size: { width: number; height: number }) => {
+      const workspace = getWorkspace();
+      workspace?.set(size);
+      canvas.renderAll();
+    },
+    changeBackground: (color: string) => {
+      const workspace = getWorkspace();
+      workspace?.set({ fill: color });
+      canvas.renderAll();
+    },
     enableDrawingMode: () => {
       canvas.discardActiveObject();
       canvas.renderAll();
@@ -444,7 +456,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY);
 
-  useAutoResize({
+  const { autoZoom } = useAutoResize({
     canvas,
     container,
   });
@@ -456,6 +468,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
+        autoZoom,
         copy,
         paste,
         canvas,
@@ -473,7 +486,18 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
       });
     }
     return undefined;
-  }, [copy, paste, canvas, fillColor, strokeColor, strokeDashArray, strokeWidth, fontFamily, selectedObjects]);
+  }, [
+    autoZoom,
+    copy,
+    paste,
+    canvas,
+    fillColor,
+    strokeColor,
+    strokeDashArray,
+    strokeWidth,
+    fontFamily,
+    selectedObjects,
+  ]);
 
   const init = useCallback(
     ({ initialCanvas, initialContainer }: { initialCanvas: fabric.Canvas; initialContainer: HTMLDivElement }) => {
