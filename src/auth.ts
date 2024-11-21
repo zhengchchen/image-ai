@@ -11,4 +11,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         usersTable: users,
         accountsTable: accounts,
     }),
+    pages:{
+        signIn:"/sign-in"
+    }
 })
