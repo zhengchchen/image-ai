@@ -1,5 +1,7 @@
 "use client";
 
+import { useFilePicker } from 'use-file-picker'
+
 import { ChevronDown, Download, MousePointerClick, Redo2, Undo2 } from "lucide-react";
 import { CiFileOn } from "react-icons/ci";
 
@@ -27,6 +29,20 @@ interface NavbarProps {
 }
 
 export const Navbar = ({ editor, activeTool, onChangeActiveTool }: NavbarProps) => {
+  const { openFilePicker } = useFilePicker({
+    accept:".json",
+    onFilesSuccessfullySelected:({plainFiles}:any)=>{
+      if(plainFiles && plainFiles.length > 0){
+        const file = plainFiles[0]
+        const reader = new FileReader()
+        reader.readAsText(file,"UTF-8")
+        reader.onload = ()=>{
+          editor?.loadFromJson(reader.result as string)
+        }
+      }
+    }
+  })
+
   return (
     <nav className="w-full flex items-center p-4 h-[68px] gap-x-8 border-b lg:pl-[34px]">
       <Logo />
@@ -39,7 +55,7 @@ export const Navbar = ({ editor, activeTool, onChangeActiveTool }: NavbarProps) 
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="min-w-60">
-            <DropdownMenuItem onClick={() => console.log("open")} className="flex items-center gap-x-2">
+            <DropdownMenuItem onClick={openFilePicker} className="flex items-center gap-x-2">
               <CiFileOn className="size-8" />
               <div>
                 <p>Open</p>
@@ -82,28 +98,28 @@ export const Navbar = ({ editor, activeTool, onChangeActiveTool }: NavbarProps) 
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-60">
-              <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => console.log("click")}>
+              <DropdownMenuItem className="flex items-center gap-x-2" onClick={editor?.saveJson}>
                 <CiFileOn className="size-8" />
                 <div>
                   <p>JSON</p>
                   <p className="text-xs text-muted-foreground">Save for later editing</p>
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => console.log("click")}>
+              <DropdownMenuItem className="flex items-center gap-x-2" onClick={editor?.savePng}>
                 <CiFileOn className="size-8" />
                 <div>
                   <p>PNG</p>
                   <p className="text-xs text-muted-foreground">Best for sharing on web</p>
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => console.log("click")}>
+              <DropdownMenuItem className="flex items-center gap-x-2" onClick={editor?.saveJpg}>
                 <CiFileOn className="size-8" />
                 <div>
                   <p>JPG</p>
                   <p className="text-xs text-muted-foreground">Best for printing</p>
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => console.log("click")}>
+              <DropdownMenuItem className="flex items-center gap-x-2" onClick={editor?.saveSvg}>
                 <CiFileOn className="size-8" />
                 <div>
                   <p>SVG</p>

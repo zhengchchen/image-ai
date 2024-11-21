@@ -1,8 +1,8 @@
 import { fabric } from "fabric";
 import { useCallback, useState, useMemo } from "react";
 
-import { useAutoResize } from "@/features/editor/hooks/use-auto-resize";
 import { useCanvasEvents } from "@/features/editor/hooks/use-canvas-events";
+import { useAutoResize } from "@/features/editor/hooks/use-auto-resize";
 
 import {
   Editor,
@@ -22,10 +22,12 @@ import {
   FONT_SIZE,
   JSON_KEYS,
 } from "@/features/editor/types";
-import { createFilter, isTextType } from "@/features/editor/utils";
+import { createFilter, downloadFile, isTextType, transformText } from "@/features/editor/utils";
 import { useClipboard } from "@/features/editor/hooks/use-clipboard";
 import { useHistory } from "@/features/editor/hooks/use-history";
-import { useHotkeys } from "./use-hotkyes";
+import { useHotkeys } from "@/features/editor/hooks/use-hotkeys";
+import { useWindowEvents } from "@/features/editor/hooks/use-window-events";
+
 
 const buildEditor = ({
   save,
@@ -49,9 +51,67 @@ const buildEditor = ({
   setStrokeDashArray,
   selectedObjects,
 }: BuildEditorProps): Editor => {
+  const generateSaveOptions = () => {
+    const { width, height, top, left } = getWorkspace() as fabric.Rect;
+    return {
+      name: "Image",
+      format: "png",
+      quality: 1,
+      left,
+      top,
+      width,
+      height,
+    };
+  };
+
   const getWorkspace = () => {
     return canvas.getObjects().find((object) => object.name === "clip");
   };
+
+  const savePng = () => {
+    const options = generateSaveOptions();
+
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+
+    downloadFile(dataUrl, "png");
+    autoZoom();
+  };
+
+  const saveSvg = () => {
+    const options = generateSaveOptions();
+
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+    
+    downloadFile(dataUrl, "svg");
+    autoZoom();
+  };
+
+  const saveJpg = () => {
+    const options = generateSaveOptions();
+
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+    
+    downloadFile(dataUrl, "jpg");
+    autoZoom();
+  };
+
+  const saveJson = async () => {
+    const dataUrl = canvas.toJSON(JSON_KEYS);
+
+    await transformText(dataUrl.objects);
+    const fileString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(dataUrl,null,"\t"))}`;
+    downloadFile(fileString, "json");
+  };
+
+  const loadFromJson = (json:string)=>{
+    const data = JSON.parse(json);
+    canvas.loadFromJSON(data,()=>{
+      autoZoom();
+    });
+  }
 
   const center = (object: fabric.Object) => {
     const workspace = getWorkspace();
@@ -68,6 +128,11 @@ const buildEditor = ({
   };
 
   return {
+    savePng,
+    saveSvg,
+    saveJpg,
+    saveJson,
+    loadFromJson,
     canUndo,
     canRedo,
     getWorkspace,
@@ -489,6 +554,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
     canvas,
     container,
   });
+
+  useWindowEvents();
 
   useCanvasEvents({ save, canvas, setSelectedObjects, clearSelectionCallback });
 
