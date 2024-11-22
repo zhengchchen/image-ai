@@ -13,9 +13,25 @@ import {
     CardContent,
     CardDescription
 } from "@/components/ui/card"
+import { useState } from "react"
+import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
+import { useSearchParams } from "next/navigation"
+import { TriangleAlert } from "lucide-react"
 
 
 export const SignInCard = () => {
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const params = useSearchParams()
+    const error = params.get("error")
+
+    const onCredentialsSignin = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        signIn("credentials", { email, password, redirectTo: "/" });
+    }
 
     const onProviderSignin = (provider:"github" | "google") => {
         signIn(provider,{ redirectTo:"/" })
@@ -26,7 +42,19 @@ export const SignInCard = () => {
             <CardTitle>Login to continue</CardTitle>
             <CardDescription>Use your email or another service to login</CardDescription>
         </CardHeader>
+        {
+            !!error && <div className="bg-destructive/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive mb-6">
+                <TriangleAlert className="size-4 text-destructive"/>
+                <p className="text-sm text-destructive">Invalid email or password</p>
+            </div>
+        }
         <CardContent className="space-y-5 px-0 pb-0">
+            <form onSubmit={onCredentialsSignin} className="space-y-2.5">
+                <Input type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                <Input type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+                <Button type="submit" className="w-full" size="lg">Continue</Button>
+            </form>
+            <Separator/>
             <div className="flex flex-col gap-y-2.5">
                 <Button onClick={() => onProviderSignin("google")} className="w-full relative" variant="outline" size="lg">
                     <FcGoogle className="absolute mr-2 size-5 top-2.5 left-2.5"/>Continue with Google
