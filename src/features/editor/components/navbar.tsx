@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BsCloudCheck } from "react-icons/bs";
 import { cn } from "@/lib/utils";
+import { UserButton } from '@/features/auth/components/user-button';
 
 interface NavbarProps {
   editor: Editor | undefined;
@@ -128,6 +129,7 @@ export const Navbar = ({ editor, activeTool, onChangeActiveTool }: NavbarProps) 
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <UserButton />
         </div>
       </div>
     </nav>
