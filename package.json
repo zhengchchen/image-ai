@@ -12,7 +12,9 @@
     "db:studio": "npx drizzle-kit studio"
   },
   "dependencies": {
+    "@auth/core": "^0.37.4",
     "@auth/drizzle-adapter": "^1.7.4",
+    "@hono/auth-js": "^1.0.15",
     "@hono/zod-validator": "^0.4.1",
     "@neondatabase/serverless": "^0.10.3",
     "@radix-ui/react-dropdown-menu": "^2.1.2",
@@ -31,7 +33,7 @@
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.36.3",
     "fabric": "5.3.0-browser",
-    "hono": "^4.6.10",
+    "hono": "^4.6.11",
     "jsdom": "^25.0.0",
     "lucide-react": "^0.440.0",
     "material-colors": "^1.2.6",
