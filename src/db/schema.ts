@@ -1,31 +1,29 @@
-import {
-    boolean,
-    timestamp,
-    pgTable,
-    text,
-    primaryKey,
-    integer,
-  } from "drizzle-orm/pg-core"
-import type { AdapterAccountType } from "next-auth/adapters"
-   
-   
+import { relations } from "drizzle-orm";
+import { createInsertSchema } from "drizzle-zod";
+import { boolean, timestamp, pgTable, text, primaryKey, integer } from "drizzle-orm/pg-core";
+import type { AdapterAccountType } from "next-auth/adapters";
+
 export const users = pgTable("user", {
-    id: text("id")
-        .primaryKey()
-        .$defaultFn(() => crypto.randomUUID()),
-    name: text("name"),
-    email: text("email").unique(),
-    emailVerified: timestamp("emailVerified", { mode: "date" }),
-    image: text("image"),
-    password: text("password"),
-})
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name"),
+  email: text("email").unique(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  image: text("image"),
+  password: text("password"),
+});
+
+export const userRelations = relations(users, ({ many }) => ({
+  projects: many(projects),
+}));
 
 export const accounts = pgTable(
-"account",
-{
+  "account",
+  {
     userId: text("userId")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
     type: text("type").$type<AdapterAccountType>().notNull(),
     provider: text("provider").notNull(),
     providerAccountId: text("providerAccountId").notNull(),
@@ -36,53 +34,80 @@ export const accounts = pgTable(
     scope: text("scope"),
     id_token: text("id_token"),
     session_state: text("session_state"),
-},
-(account) => ({
+  },
+  (account) => ({
     compoundKey: primaryKey({
-    columns: [account.provider, account.providerAccountId],
+      columns: [account.provider, account.providerAccountId],
     }),
-})
-)
+  })
+);
 
 export const sessions = pgTable("session", {
-sessionToken: text("sessionToken").primaryKey(),
-userId: text("userId")
+  sessionToken: text("sessionToken").primaryKey(),
+  userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-expires: timestamp("expires", { mode: "date" }).notNull(),
-})
+  expires: timestamp("expires", { mode: "date" }).notNull(),
+});
 
 export const verificationTokens = pgTable(
-"verificationToken",
-{
+  "verificationToken",
+  {
     identifier: text("identifier").notNull(),
     token: text("token").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
-},
-(verificationToken) => ({
+  },
+  (verificationToken) => ({
     compositePk: primaryKey({
-    columns: [verificationToken.identifier, verificationToken.token],
+      columns: [verificationToken.identifier, verificationToken.token],
     }),
-})
-)
+  })
+);
 
 export const authenticators = pgTable(
-"authenticator",
-{
+  "authenticator",
+  {
     credentialID: text("credentialID").notNull().unique(),
     userId: text("userId")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
     providerAccountId: text("providerAccountId").notNull(),
     credentialPublicKey: text("credentialPublicKey").notNull(),
     counter: integer("counter").notNull(),
     credentialDeviceType: text("credentialDeviceType").notNull(),
     credentialBackedUp: boolean("credentialBackedUp").notNull(),
     transports: text("transports"),
-},
-(authenticator) => ({
+  },
+  (authenticator) => ({
     compositePK: primaryKey({
-    columns: [authenticator.userId, authenticator.credentialID],
+      columns: [authenticator.userId, authenticator.credentialID],
     }),
-})
-)
+  })
+);
+
+export const projects = pgTable("project", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull(),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  json: text("json").notNull(),
+  height: integer("height").notNull(),
+  width: integer("width").notNull(),
+  thumbnailUrl: text("thumbnailUrl"),
+  isTemplate: boolean("isTemplate"),
+  isPro: boolean("isPro"),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
+  updatedAt: timestamp("updatedAt", { mode: "date" }).notNull(),
+});
+
+export const projectRelations = relations(projects, ({ one }) => ({
+  user: one(users, {
+    fields: [projects.userId],
+    references: [users.id],
+  }),
+}));
+
+export const projectInsertSchema = createInsertSchema(projects);
