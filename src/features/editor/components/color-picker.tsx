@@ -23,9 +23,7 @@ export const ColorPicker = ({ value, onChange }: ColorPickerProps) => {
         color={value}
         colors={colors}
         onChangeComplete={(color) => {
-          console.log("color", color);
           const formattedValue = rgbaObjectToString(color.rgb);
-          console.log("formattedValue", formattedValue);
           onChange(formattedValue);
         }}
       />

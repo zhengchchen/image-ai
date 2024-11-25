@@ -4,7 +4,6 @@ import { uuid } from "uuidv4";
 
 export function transformText(objects:any){
   if(!objects) return;
-  console.log("objects",objects);
   objects.forEach((item:any)=>{
     if(item.objects){
       transformText(item.objects);

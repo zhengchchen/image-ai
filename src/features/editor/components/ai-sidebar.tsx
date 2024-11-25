@@ -28,7 +28,6 @@ export const AiSidebar = ({ editor, activeTool, onChangeActiveTool }: AiSidebarP
       {
         // @ts-ignore
         onSuccess: ({ data }) => {
-          console.log(data);
           editor?.addImage(data);
         },
       }
