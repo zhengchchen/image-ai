@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
-import { AlertTriangle, Loader } from "lucide-react";
+
+import { AlertTriangle, Crown, Loader } from "lucide-react";
 
 import { ActiveTool, Editor } from "@/features/editor/types";
 import { ToolSidebarClose } from "@/features/editor/components/tool-sidebar-close";
@@ -11,6 +11,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ResponseType, useGetTemplates } from "@/features/projects/api/use-get-templates";
 import { ToolSidebarHeader } from "./tool-sidebar-header";
 import { useConfirm } from "@/hooks/use-confirm";
+import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
 
 interface TemplateSidebarProps {
   editor: Editor | undefined;
@@ -22,17 +23,23 @@ export const TemplateSidebar = ({ editor, activeTool, onChangeActiveTool }: Temp
   const [ConfirmDialog, confirm] = useConfirm(
     "Are you sure",
     "You are about to replace the current project with this template."
-  )
+  );
+
+  const { shouldBlock, triggerPaywall } = usePaywall();
 
   const { data, isLoading, isError } = useGetTemplates({
     limit: "20",
-    page: "1"
+    page: "1",
   });
   const onClose = () => {
     onChangeActiveTool("select");
   };
 
   const onClick = async (template: ResponseType["data"][0]) => {
+    if (template.isPro && shouldBlock) {
+      triggerPaywall();
+      return;
+    }
     const ok = await confirm();
     if (ok) {
       editor?.loadFromJson(template.json);
@@ -67,7 +74,7 @@ export const TemplateSidebar = ({ editor, activeTool, onChangeActiveTool }: Temp
                 return (
                   <button
                     style={{
-                      aspectRatio: `${template.width} / ${template.height}`
+                      aspectRatio: `${template.width} / ${template.height}`,
                     }}
                     key={template.id}
                     onClick={() => onClick(template)}
@@ -79,9 +86,12 @@ export const TemplateSidebar = ({ editor, activeTool, onChangeActiveTool }: Temp
                       alt={template.name || "Template"}
                       className="object-cover"
                     />
-                    <div
-                      className="opacity-0 group-hover:opacity-100 absolute left-0 bottom-0 w-full text-[10px] truncate text-white p-1 bg-black/50 text-left"
-                    >
+                    {template.isPro && (
+                      <div className="absolute top-2 right-2 size-8 items-center justify-center bg-black/50 rounded-full flex">
+                        <Crown className="size-4 text-yellow-500 fill-yellow-500" />
+                      </div>
+                    )}
+                    <div className="opacity-0 group-hover:opacity-100 absolute left-0 bottom-0 w-full text-[10px] truncate text-white p-1 bg-black/50 text-left">
                       {template.name}
                     </div>
                   </button>

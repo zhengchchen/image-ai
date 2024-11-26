@@ -35,13 +35,10 @@ export const Editor = ({ initialData }: EditorProps) => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSave = useCallback(
-    debounce((values: {
-      json: string;
-      height: number;
-      width: number;
-    }) => {  mutate(values) },
-    500 ),
-    [ mutate ]
+    debounce((values: { json: string; height: number; width: number }) => {
+      mutate(values);
+    }, 500),
+    [mutate]
   );
 
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");

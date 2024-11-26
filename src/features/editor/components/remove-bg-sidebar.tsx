@@ -11,6 +11,7 @@ import { useGenerateImage } from "@/features/ai/api/use-generate-image";
 import { useState } from "react";
 import { AlertTriangle } from "lucide-react";
 import { useRemoveBackground } from "@/features/ai/api/use-remove-background";
+import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
 
 interface RemoveBgSidebarProps {
   editor: Editor | undefined;
@@ -21,6 +22,8 @@ interface RemoveBgSidebarProps {
 export const RemoveBgSidebar = ({ editor, activeTool, onChangeActiveTool }: RemoveBgSidebarProps) => {
   const mutation = useRemoveBackground();
 
+  const { shouldBlock, triggerPaywall } = usePaywall();
+
   const selectedObject = editor?.selectedObjects[0];
   // @ts-ignore
   const imageSrc = selectedObject?._originalElement?.currentSrc;
@@ -30,6 +33,10 @@ export const RemoveBgSidebar = ({ editor, activeTool, onChangeActiveTool }: Remo
   };
 
   const onClick = () => {
+    if (shouldBlock) {
+      triggerPaywall();
+      return;
+    }
     mutation.mutate(
       {
         image: imageSrc,
