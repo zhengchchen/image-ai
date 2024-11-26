@@ -14,8 +14,20 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Image AI",
-  description: "Image AI",
+  title: "Image AI - AI-Powered Image Editor & Generator",
+  description:
+    "Transform your images with AI magic. Create, edit, and enhance photos with advanced AI filters, one-click beautification, and AI image generation.",
+  keywords: "AI image editor, online photo editor, AI filters, image generation, photo enhancement",
+  openGraph: {
+    title: "ImageGicAI - AI-Powered Image Editor & Generator",
+    description: "Transform your images with AI magic",
+    images: ["/og-image.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ImageGicAI - AI-Powered Image Editor",
+    description: "Transform your images with AI magic",
+  },
 };
 
 export default async function RootLayout({
