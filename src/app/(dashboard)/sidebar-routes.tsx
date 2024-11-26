@@ -7,15 +7,25 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 import { SidebarItem } from "./sidebar-item";
+import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
 
 export const SidebarRoutes = () => {
   const pathname = usePathname();
+
+  const { shouldBlock, triggerPaywall } = usePaywall();
+
+  const onClick = () => {
+    if (shouldBlock) {
+      triggerPaywall();
+      return;
+    }
+  };
 
   return (
     <div className="flex flex-col gap-y-4 flex-1">
       <div className="px-3">
         <Button
-          onClick={() => {}}
+          onClick={onClick}
           className="w-full rounded-xl border-none bg-white hover:bg-white hover:opacity-75 transition"
           variant="outline"
           size="lg"
