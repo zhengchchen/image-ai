@@ -22,14 +22,26 @@ import { useGetProjects } from "@/features/projects/api/use-get-projects";
 import { Search, AlertTriangle, Loader, FileIcon, MoreHorizontal, CopyIcon, Trash, TrashIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDuplicateProject } from "@/features/projects/api/use-duplicate-project";
+import { useDeleteProject } from "@/features/projects/api/use-delete-project";
+import { useConfirm } from "@/hooks/use-confirm";
 
 export const ProjectsSection = () => {
+  const [ConfirmationDialog, confirm] = useConfirm(
+    "Are you sure?", 
+    "You are about to delete this project."
+  );
   const router = useRouter();
 
   const duplicateMutation = useDuplicateProject();
+  const removeMutation = useDeleteProject();
 
   const onCopy = (id:string) => {
     duplicateMutation.mutate({ id });
+  }
+
+  const onDelete = async (id:string) => {
+    const ok = await confirm();
+    if(ok) removeMutation.mutate({ id });
   }
 
   const { 
@@ -75,6 +87,7 @@ export const ProjectsSection = () => {
 
   return (
     <div className="space-y-6">
+      <ConfirmationDialog />
       <h3 className="font-semibold text-lg">Recent Projects</h3>
       <Table>
         <TableBody>
@@ -99,7 +112,7 @@ export const ProjectsSection = () => {
                                     { formatDistanceToNow(new Date(project.updatedAt), {addSuffix: true}) }
                             </TableCell>
                             <TableCell className="flex items-center justify-end">
-                                <DropdownMenu  modal={false}>
+                                <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Button disabled={false} variant="ghost" size="icon">
                                             <MoreHorizontal className="size-4"/>
@@ -109,15 +122,15 @@ export const ProjectsSection = () => {
                                         <DropdownMenuItem 
                                             className="h-10 cursor-pointer" 
                                             disabled={duplicateMutation.isPending} 
-                                            onClick={()=>onCopy(project.id)}>
+                                            onClick={() => onCopy(project.id)}>
                                                 <CopyIcon className="size-4 mr-2"/>
                                                 Make a copy
                                         </DropdownMenuItem>
 
                                         <DropdownMenuItem 
                                             className="h-10 cursor-pointer" 
-                                            disabled={false} 
-                                            onClick={()=>{ }}>
+                                            disabled={removeMutation.isPending} 
+                                            onClick={() => onDelete(project.id)}>
                                                 <TrashIcon className="size-4 mr-2"/>
                                                 Delete
                                         </DropdownMenuItem>

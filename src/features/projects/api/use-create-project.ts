@@ -14,7 +14,7 @@ export const useCreateProject = () => {
     mutationFn: async (json) => {
       const response = await client.api.projects.$post({ json });
       if (!response.ok) {
-        throw new Error("Something went wrong");
+        throw new Error("Failed to create project");
       }
       return await response.json();
     },
