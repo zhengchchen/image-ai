@@ -67,13 +67,13 @@ export const ProjectsSection = () => {
         <div className="flex flex-col items-center justify-center h-32 gap-y-4">
             <AlertTriangle className="size-6 text-muted-foreground"/>
             <p className="text-sm text-muted-foreground">
-                Failed to fetch projects
+                Failed to load projects
             </p>
         </div>
     </div>
   }
 
-  if(!data.pages.length){
+  if(!data.pages.length || !data.pages[0].data.length){
     return <div className="space-y-6">
         <h3 className="font-semibold text-lg">Recent Projects</h3>
         <div className="flex flex-col items-center justify-center h-32 gap-y-4">
