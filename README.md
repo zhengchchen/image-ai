@@ -79,13 +79,14 @@ Image AI 是一个功能强大的在线图片编辑器,集成了 AI 图片生成
     src/
     ├── app/ # Next.js 应用路由
     ├── components/ # 通用组件
+    ├── db/ # 数据库 schema 定义
+    ├── hooks/ # 自定义 hooks
     ├── features/ # 功能模块
     │ ├── editor/ # 编辑器核心功能
     │ ├── ai/ # AI 相关功能
     │ ├── auth/ # 认证相关
     │ └── projects/ # 项目管理
-    ├── lib/ # 工具函数和配置
-    └── types/ # TypeScript 类型定义
+    └── lib/ # 工具函数和配置
 
 ## 📄 License
 
