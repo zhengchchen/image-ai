@@ -3,7 +3,7 @@ import { useSubscriptionModal } from "@/features/subscriptions/store/use-subscri
 export const usePaywall = () => {
   const subscriptionModal = useSubscriptionModal();
 
-  const shouldBlock = false;
+  const shouldBlock = true;
 
   return {
     isLoading: false,
