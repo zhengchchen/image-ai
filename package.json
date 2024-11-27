@@ -30,6 +30,7 @@
     "@types/material-colors": "^1.2.3",
     "@types/react-color": "^3.0.12",
     "@uploadthing/react": "^7.1.1",
+    "@vercel/analytics": "^1.4.1",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

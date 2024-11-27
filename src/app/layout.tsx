@@ -8,6 +8,7 @@ import { Providers } from "@/components/provides";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
 import { Modals } from "@/components/modals";
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,6 +42,7 @@ export default async function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           <Providers>
+            <Analytics />
             <Toaster />
             <Modals />
             {children}
